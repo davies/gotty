@@ -48,6 +48,7 @@ export class WebTTY {
     args: string;
     authToken: string;
     reconnect: number;
+    connection: Connection;
 
     constructor(term: Terminal, connectionFactory: ConnectionFactory, args: string, authToken: string) {
         this.term = term;
@@ -57,10 +58,16 @@ export class WebTTY {
         this.reconnect = -1;
     };
 
+    send(input: string) {
+        this.connection.send(msgInput + input);
+    };
+
     open() {
         let connection = this.connectionFactory.create();
         let pingTimer: number;
         let reconnectTimeout: number;
+
+        this.connection = connection;
 
         const setup = () => {
             connection.onOpen(() => {

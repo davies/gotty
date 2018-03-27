@@ -43,6 +43,8 @@ export declare class WebTTY {
     args: string;
     authToken: string;
     reconnect: number;
+    connection: Connection;
     constructor(term: Terminal, connectionFactory: ConnectionFactory, args: string, authToken: string);
+    send(input: string): void;
     open(): () => void;
 }

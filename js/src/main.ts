@@ -7,10 +7,6 @@ import { ConnectionFactory } from "./websocket";
 declare var gotty_auth_token: string;
 declare var gotty_term: string;
 
-declare global {
-    interface Window { term: Terminal; }
-}
-
 const elem = document.getElementById("terminal")
 
 if (elem !== null) {
@@ -27,9 +23,15 @@ if (elem !== null) {
     const wt = new WebTTY(term, factory, args, gotty_auth_token);
     const closer = wt.open();
 
-    window.term = term;
     window.addEventListener("unload", () => {
         closer();
         term.close();
     });
+
+    window.addEventListener("message", (event) => {
+        if (typeof event.data === "string") {
+            wt.send(event.data);
+        }
+    }, false);
 };
+
